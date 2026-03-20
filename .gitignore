@@ -1,0 +1,18 @@
+# Java / Maven
+target/
+*.jar
+*.class
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# IDEs (IntelliJ, VSCode, Eclipse)
+.idea/
+.vscode/
+*.iml
+
+# Environment Variables
+.env
