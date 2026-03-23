@@ -164,3 +164,111 @@ async def withdraw_from_account(account_id: int, request: WithdrawRequest, token
                 status_code=500, 
                 detail=f"Internal server error: {str(e)}"
             )
+
+@app.post("/api/accounts/{account_id}/cards")
+async def generate_virtual_card(account_id: int, token: str = Depends(oauth2_scheme)):
+    """
+    Forward POST request to Spring backend for virtual card generation.
+    Creates a new virtual card for the account.
+    """
+    async with httpx.AsyncClient() as client:
+        try:
+            url = f"{settings.spring_backend_url}/api/accounts/{account_id}/cards"
+            headers = {"Authorization": f"Bearer {token}"}
+            logger.info(f"Forwarding POST request to: {url} for card generation")
+            
+            response = await client.post(url, headers=headers, timeout=10.0)
+            response.raise_for_status()
+            
+            logger.info(f"Virtual card generated successfully for account {account_id}")
+            return response.json()
+            
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Backend error: {e.response.status_code} - {e.response.text}")
+            if e.response.status_code == 401:
+                raise HTTPException(
+                    status_code=401, 
+                    detail="Unauthorized: Invalid or expired token"
+                )
+            elif e.response.status_code == 404:
+                raise HTTPException(
+                    status_code=404, 
+                    detail="Account not found"
+                )
+            else:
+                raise HTTPException(
+                    status_code=e.response.status_code, 
+                    detail=f"Backend service error: {e.response.text[:200]}"
+                )
+        except httpx.ConnectError:
+            logger.error("Connection error to Spring backend during card generation")
+            raise HTTPException(
+                status_code=503, 
+                detail="Spring backend service unavailable (connection error)"
+            )
+        except httpx.TimeoutException:
+            logger.error("Timeout during card generation request")
+            raise HTTPException(
+                status_code=504, 
+                detail="Spring backend service unavailable (timeout)"
+            )
+        except Exception as e:
+            logger.error(f"Unexpected error during card generation: {str(e)}")
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Internal server error: {str(e)}"
+            )
+
+@app.get("/api/accounts/{account_id}/cards")
+async def get_virtual_cards(account_id: int, token: str = Depends(oauth2_scheme)):
+    """
+    Forward GET request to Spring backend for virtual card retrieval.
+    Returns the list of virtual cards for the account.
+    """
+    async with httpx.AsyncClient() as client:
+        try:
+            url = f"{settings.spring_backend_url}/api/accounts/{account_id}/cards"
+            headers = {"Authorization": f"Bearer {token}"}
+            logger.info(f"Forwarding GET request to: {url} for card retrieval")
+            
+            response = await client.get(url, headers=headers, timeout=10.0)
+            response.raise_for_status()
+            
+            logger.info(f"Virtual cards retrieved successfully for account {account_id}")
+            return response.json()
+            
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Backend error: {e.response.status_code} - {e.response.text}")
+            if e.response.status_code == 401:
+                raise HTTPException(
+                    status_code=401, 
+                    detail="Unauthorized: Invalid or expired token"
+                )
+            elif e.response.status_code == 404:
+                raise HTTPException(
+                    status_code=404, 
+                    detail="Account not found or no cards available"
+                )
+            else:
+                raise HTTPException(
+                    status_code=e.response.status_code, 
+                    detail=f"Backend service error: {e.response.text[:200]}"
+                )
+        except httpx.ConnectError:
+            logger.error("Connection error to Spring backend during card retrieval")
+            raise HTTPException(
+                status_code=503, 
+                detail="Spring backend service unavailable (connection error)"
+            )
+        except httpx.TimeoutException:
+            logger.error("Timeout during card retrieval request")
+            raise HTTPException(
+                status_code=504, 
+                detail="Spring backend service unavailable (timeout)"
+            )
+        except Exception as e:
+            logger.error(f"Unexpected error during card retrieval: {str(e)}")
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Internal server error: {str(e)}"
+            )

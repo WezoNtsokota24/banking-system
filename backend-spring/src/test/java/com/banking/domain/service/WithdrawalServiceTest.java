@@ -4,7 +4,6 @@ import com.banking.domain.exception.InsufficientFundsException;
 import com.banking.domain.model.Account;
 import com.banking.domain.model.Transaction;
 import com.banking.domain.model.TransactionStatus;
-import com.banking.domain.model.TransactionType;
 import com.banking.domain.port.AccountRepository;
 import com.banking.domain.port.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +59,6 @@ class WithdrawalServiceTest {
         Transaction savedTransaction = transactionCaptor.getValue();
         assertEquals(accountId, savedTransaction.getAccountId());
         assertEquals(amount, savedTransaction.getAmount());
-        assertEquals(TransactionType.WITHDRAWAL, savedTransaction.getType());
         assertEquals(TransactionStatus.PENDING, savedTransaction.getStatus());
     }
 

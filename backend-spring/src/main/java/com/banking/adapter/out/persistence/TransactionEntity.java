@@ -1,7 +1,6 @@
 package com.banking.adapter.out.persistence;
 
 import com.banking.domain.model.TransactionStatus;
-import com.banking.domain.model.TransactionType;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -21,20 +20,15 @@ public class TransactionEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TransactionType type;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private TransactionStatus status;
 
     // Default constructor required by JPA
     protected TransactionEntity() {}
 
-    public TransactionEntity(Long id, Long accountId, BigDecimal amount, TransactionType type, TransactionStatus status) {
+    public TransactionEntity(Long id, Long accountId, BigDecimal amount, TransactionStatus status) {
         this.id = id;
         this.accountId = accountId;
         this.amount = amount;
-        this.type = type;
         this.status = status;
     }
 
@@ -47,9 +41,6 @@ public class TransactionEntity {
 
     public BigDecimal getAmount() { return amount; }
     public void setAmount(BigDecimal amount) { this.amount = amount; }
-
-    public TransactionType getType() { return type; }
-    public void setType(TransactionType type) { this.type = type; }
 
     public TransactionStatus getStatus() { return status; }
     public void setStatus(TransactionStatus status) { this.status = status; }

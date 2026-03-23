@@ -15,7 +15,7 @@ import java.util.List;
  * 
  * This is a thin orchestrator that delegates domain logic to the Transaction aggregate.
  */
-public class TransactionService {
+public class TransactionService implements BatchUseCase {
 
     private final TransactionRepository transactionRepository;
 
@@ -24,48 +24,28 @@ public class TransactionService {
     }
 
     /**
-     * Process the nightly batch of pending transactions.
+     * Process pending transactions.
      * 
      * Orchestration steps:
      * 1. Fetch all PENDING transactions
-     * 2. Print audit report
-     * 3. Transition each transaction from PENDING to COMPLETED
-     * 4. Persist updates
+     * 2. Transition each transaction from PENDING to COMPLETED
+     * 3. Persist updates
+     * 4. Log the number of processed transactions
      */
-    public void processNightlyBatch() {
+    @Override
+    public void processPendingTransactions() {
         // Step 1: Fetch all PENDING transactions from repository
         List<Transaction> pendingTransactions = transactionRepository.findByStatus(TransactionStatus.PENDING);
 
-        // Step 2: Print audit report
-        printBatchReport(pendingTransactions);
-
-        // Step 3: Process each transaction
+        // Step 2: Process each transaction
         for (Transaction transaction : pendingTransactions) {
             // Invoke domain method to transition state
             transaction.complete();
-            // Step 4: Persist the updated transaction
+            // Step 3: Persist the updated transaction
             transactionRepository.save(transaction);
         }
 
-        System.out.println("All pending transactions have been processed and marked as COMPLETED.");
-        System.out.println("=====================================");
-    }
-
-    /**
-     * Print audit report for the batch process.
-     * 
-     * @param transactions The list of transactions to report on
-     */
-    private void printBatchReport(List<Transaction> transactions) {
-        System.out.println("=== NIGHTLY TRANSACTION BATCH REPORT ===");
-        System.out.println("Processing " + transactions.size() + " pending transactions:");
-
-        for (Transaction transaction : transactions) {
-            System.out.println("Transaction ID: " + transaction.getId() +
-                             ", Account: " + transaction.getAccountId() +
-                             ", Type: " + transaction.getType() +
-                             ", Amount: " + transaction.getAmount() +
-                             ", Status: " + transaction.getStatus());
-        }
+        // Step 4: Log the number of processed transactions
+        System.out.println(pendingTransactions.size() + " pending transactions have been processed and marked as COMPLETED.");
     }
 }

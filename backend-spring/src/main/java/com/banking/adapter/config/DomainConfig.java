@@ -5,8 +5,10 @@ import com.banking.domain.port.JwtPort;
 import com.banking.domain.port.PasswordEncoderPort;
 import com.banking.domain.port.TransactionRepository;
 import com.banking.domain.port.UserRepository;
+import com.banking.domain.port.VirtualCardPort;
 import com.banking.domain.service.AuthService;
 import com.banking.domain.service.TransactionService;
+import com.banking.domain.service.VirtualCardService;
 import com.banking.domain.service.WithdrawalService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,5 +29,10 @@ public class DomainConfig {
     @Bean
     public AuthService authService(UserRepository userRepository, PasswordEncoderPort passwordEncoder, JwtPort jwtPort) {
         return new AuthService(userRepository, passwordEncoder, jwtPort);
+    }
+
+    @Bean
+    public VirtualCardService virtualCardService(VirtualCardPort virtualCardPort) {
+        return new VirtualCardService(virtualCardPort);
     }
 }
