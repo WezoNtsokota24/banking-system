@@ -3,6 +3,7 @@ package com.banking.domain.service;
 import com.banking.domain.model.Transaction;
 import com.banking.domain.model.TransactionStatus;
 import com.banking.domain.port.TransactionRepository;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
@@ -15,7 +16,8 @@ import java.util.List;
  * 
  * This is a thin orchestrator that delegates domain logic to the Transaction aggregate.
  */
-public class TransactionService implements BatchUseCase {
+@Service
+public class TransactionService implements PendingTransactionFinalizationUseCase {
 
     private final TransactionRepository transactionRepository;
 

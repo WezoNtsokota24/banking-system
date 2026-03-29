@@ -26,13 +26,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
+            .csrf().disable() // Disable CSRF protection
+            .cors().and() // Enable CORS with default settings
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-                .antMatchers("/api/auth/login").permitAll()
-                .antMatchers("/health").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/auth/**").permitAll() // Allow login
+                .anyRequest().authenticated()            // Protect everything else
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtPort), UsernamePasswordAuthenticationFilter.class);
 

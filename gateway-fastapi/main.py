@@ -35,6 +35,7 @@ async def login(request: LoginRequest):
     """
     async with httpx.AsyncClient() as client:
         try:
+            # Use the configurable backend URL from settings/environment variables
             url = f"{settings.spring_backend_url}/api/auth/login"
             headers = {"Content-Type": "application/json"}
             payload = {"username": request.username, "password": request.password}
@@ -54,7 +55,7 @@ async def login(request: LoginRequest):
                 detail=f"Authentication failed: {e.response.text[:200]}"
             )
         except httpx.ConnectError:
-            logger.error("Connection error to Spring backend during login")
+            logger.error(f"Connection error to Spring backend at {settings.spring_backend_url}")
             raise HTTPException(
                 status_code=503, 
                 detail="Authentication service unavailable (connection error)"
