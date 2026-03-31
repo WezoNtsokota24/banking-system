@@ -10,7 +10,7 @@ import java.util.List;
  * REST controller for virtual card operations.
  */
 @RestController
-@RequestMapping("/api/accounts/{accountId}/cards")
+@RequestMapping("/api/accounts")
 public class VirtualCardController {
 
     private final VirtualCardService virtualCardService;
@@ -19,13 +19,13 @@ public class VirtualCardController {
         this.virtualCardService = virtualCardService;
     }
 
-    @PostMapping
+    @PostMapping("/{accountId}/cards")
     public ResponseEntity<VirtualCard> generateCard(@PathVariable Long accountId) {
         VirtualCard card = virtualCardService.generateCard(accountId);
         return ResponseEntity.ok(card);
     }
 
-    @GetMapping
+    @GetMapping("/{accountId}/cards")
     public ResponseEntity<List<VirtualCard>> getCards(@PathVariable Long accountId) {
         List<VirtualCard> cards = virtualCardService.getCards(accountId);
         return ResponseEntity.ok(cards);
