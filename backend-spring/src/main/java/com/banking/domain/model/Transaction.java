@@ -2,6 +2,10 @@ package com.banking.domain.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Transaction domain entity.
+ * Represents a financial transaction.
+ */
 public class Transaction {
     private Long id;
     private Long accountId;
@@ -18,16 +22,28 @@ public class Transaction {
     }
 
     // Getters
-    public Long getId() { return id; }
-    public Long getAccountId() { return accountId; }
-    public BigDecimal getAmount() { return amount; }
-    public TransactionType getType() { return type; }
-    public TransactionStatus getStatus() { return status; }
+    public Long getId() {
+        return id;
+    }
 
-    // Setters
-    public void setId(Long id) { this.id = id; }
-    public void setAccountId(Long accountId) { this.accountId = accountId; }
-    public void setAmount(BigDecimal amount) { this.amount = amount; }
-    public void setType(TransactionType type) { this.type = type; }
-    public void setStatus(TransactionStatus status) { this.status = status; }
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public TransactionStatus getStatus() {
+        return status;
+    }
+
+    // Method to complete the transaction
+    public void complete() {
+        this.status = TransactionStatus.COMPLETED;
+    }
 }

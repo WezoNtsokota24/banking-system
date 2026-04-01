@@ -1,5 +1,6 @@
 package com.banking.adapter.out.persistence;
 
+import com.banking.domain.model.AccountStatus;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -17,17 +18,26 @@ public class AccountEntity {
     @Column(nullable = false)
     private BigDecimal balance;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private AccountStatus status;
 
     protected AccountEntity() {}
 
     public AccountEntity(Long id, String accountNumber, BigDecimal balance) {
+        this(id, accountNumber, balance, AccountStatus.ACTIVE);
+    }
+
+    public AccountEntity(Long id, String accountNumber, BigDecimal balance, AccountStatus status) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
+        this.status = status;
     }
 
     // Getters and Setters...
     public Long getId() { return id; }
     public String getAccountNumber() { return accountNumber; }
     public BigDecimal getBalance() { return balance; }
+    public AccountStatus getStatus() { return status; }
 }

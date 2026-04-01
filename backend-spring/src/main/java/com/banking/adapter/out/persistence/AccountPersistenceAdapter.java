@@ -22,7 +22,7 @@ public class AccountPersistenceAdapter implements AccountRepository {
         // 2. If found, translate the AccountEntity back into a pure Domain Account
         if (entityOptional.isPresent()) {
             AccountEntity entity = entityOptional.get();
-            Account pureAccount = new Account(entity.getId(), entity.getAccountNumber(), entity.getBalance());
+            Account pureAccount = new Account(entity.getId(), entity.getAccountNumber(), entity.getBalance(), entity.getStatus());
             return Optional.of(pureAccount);
         }
         return Optional.empty();
@@ -31,12 +31,12 @@ public class AccountPersistenceAdapter implements AccountRepository {
     @Override
     public Account save(Account account) {
         // 1. Translate the pure Domain Account into a Database Entity
-        AccountEntity entity = new AccountEntity(account.getId(), account.getAccountNumber(), account.getBalance());
+        AccountEntity entity = new AccountEntity(account.getId(), account.getAccountNumber(), account.getBalance(), account.getStatus());
 
         // 2. Save it using Spring's magic repository
         AccountEntity savedEntity = springRepository.save(entity);
 
         // 3. Translate the saved result back to a pure Domain Account and return it
-        return new Account(savedEntity.getId(), savedEntity.getAccountNumber(), savedEntity.getBalance());
+        return new Account(savedEntity.getId(), savedEntity.getAccountNumber(), savedEntity.getBalance(), savedEntity.getStatus());
     }
 }
