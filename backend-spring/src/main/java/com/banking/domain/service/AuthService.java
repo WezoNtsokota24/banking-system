@@ -5,13 +5,10 @@ import com.banking.domain.model.User;
 import com.banking.domain.port.JwtPort;
 import com.banking.domain.port.PasswordEncoderPort;
 import com.banking.domain.port.UserRepository;
-import org.springframework.stereotype.Service;
-
 /**
  * AuthService: Domain service for authentication.
  * Handles user authentication and JWT token generation.
  */
-@Service
 public class AuthService {
 
     private final UserRepository userRepository;

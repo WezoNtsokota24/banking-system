@@ -3,7 +3,6 @@ package com.banking.domain.service;
 import com.banking.domain.model.VirtualCard;
 import com.banking.domain.model.VirtualCardStatus;
 import com.banking.domain.port.VirtualCardPort;
-import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
@@ -12,7 +11,6 @@ import java.util.Random;
  * VirtualCardService: Domain service for virtual card operations.
  * Handles generating new cards and retrieving existing ones.
  */
-@Service
 public class VirtualCardService {
 
     private final VirtualCardPort virtualCardPort;

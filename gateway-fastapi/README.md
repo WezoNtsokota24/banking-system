@@ -1,84 +1,79 @@
-# Banking Gateway API
+# Python API Gateway (FastAPI)
 
-A FastAPI-based reverse proxy gateway for the Spring Boot banking backend.
+High-performance API Gateway for the Banking System. It handles public traffic, basic authentication routing, and orchestrates requests to the Java Spring Boot backend.
 
-## Features
+## 🚀 How to Run (Development)
 
-- **Reverse Proxy**: Forwards requests to the Spring Boot backend
-- **Async HTTP**: Uses httpx for efficient async HTTP client
-- **Error Handling**: Proper error responses when backend is unavailable
-- **Health Check**: Basic health endpoint for monitoring
+### Prerequisites
+- [Python 3.12+](https://www.python.org/downloads/)
+- Virtual Environment (`venv`)
 
-## Endpoints
+### Manual Start
+1.  **Initialize Virtual Environment**:
+    ```powershell
+    python -m venv venv
+    .\venv\Scripts\activate
+    ```
+2.  **Install Dependencies**:
+    ```powershell
+    pip install -r requirements.txt
+    ```
+3.  **Environment Setup**: Ensure `.env` points to the Spring Backend:
+    `SPRING_BACKEND_URL=http://localhost:8080`
+4.  **Run Server**:
+    ```powershell
+    uvicorn main:app --reload --port 8000
+    ```
+The gateway will start on `http://localhost:8000`.
 
-### Health Check
-- **GET** `/health`
-- Returns service status and environment
+---
 
-### Account Retrieval
-- **GET** `/api/accounts/{account_id}`
-- Forwards to Spring backend and returns account JSON
+## 🧪 How to Test
 
-### Account Withdrawal
-- **POST** `/api/accounts/{account_id}/withdraw`
-- Accepts JSON: `{"amount": 50.00}`
-- Forwards to Spring backend
+This project uses **Pytest** for unit and integration testing.
 
-## Configuration
-
-Environment variables (via `.env` file):
-- `SPRING_BACKEND_URL`: URL of the Spring Boot backend (default: http://localhost:8080)
-- `APP_NAME`: Application name (default: Banking Gateway API)
-- `ENVIRONMENT`: Environment name (default: development)
-
-## Installation
-
-1. Install dependencies:
-```bash
-pip install -r requirements.txt
+### Run All Tests
+```powershell
+.\venv\Scripts\python -m pytest
 ```
 
-## Running the Application
+---
 
-### Development Mode
-```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+## 🏗️ Technical Stack
+
+-   **FastAPI**: Modern, high-performance web framework for Python.
+-   **Pydantic**: Data validation and settings management.
+-   **Uvicorn**: Lightning-fast ASGI server implementation.
+-   **Respx**: Utility for mocking HTTP requests in tests.
+
+---
+
+## 🌍 Installation in Production
+
+### Using Docker (Recommended)
+Build and run the containerized gateway:
+```powershell
+docker build -t banking-gateway:latest .
+docker run -p 8000:8000 banking-gateway:latest
 ```
+*Note: Ensure `SPRING_BACKEND_URL` points to your production backend.*
 
-### Production Mode
-```bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+### Manual Production Setup
+1.  **Install Production Requirements**:
+    ```powershell
+    pip install -r requirements.txt
+    ```
+2.  **Run with Production Server (Uvicorn)**:
+    ```powershell
+    uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+    ```
+
+---
+
+## 🧹 Cleanup
+To clean the project environment:
+```powershell
+rm -r .pytest_cache
+# (Optional) Remove venv if you want to start fresh
+rm -r venv
 ```
-
-## Testing
-
-### Health Check
-```bash
-curl http://localhost:8000/health
-```
-
-### Get Account
-```bash
-curl http://localhost:8000/api/accounts/1
-```
-
-### Withdraw Money
-```bash
-curl -X POST http://localhost:8000/api/accounts/1/withdraw \
-  -H "Content-Type: application/json" \
-  -d '{"amount": 50.00}'
-```
-
-## Error Handling
-
-- **503 Service Unavailable**: When Spring backend is down or unreachable
-- **4xx/5xx**: Forwarded from Spring backend with appropriate status codes
-
-## Architecture
-
-This gateway acts as a reverse proxy, providing:
-- Request routing to the Spring backend
-- Unified API interface
-- Potential for future features like authentication, rate limiting, logging
-- Isolation between external clients and internal services</content>
-<parameter name="filePath">C:\Users\qfenama\Documents\banking-system\gateway-fastapi\README.md

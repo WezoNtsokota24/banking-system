@@ -10,12 +10,14 @@ public class Transaction {
     private Long id;
     private Long accountId;
     private BigDecimal amount;
+    private TransactionType type;
     private TransactionStatus status;
 
-    public Transaction(Long id, Long accountId, BigDecimal amount, TransactionStatus status) {
+    public Transaction(Long id, Long accountId, BigDecimal amount, TransactionType type, TransactionStatus status) {
         this.id = id;
         this.accountId = accountId;
         this.amount = amount;
+        this.type = type;
         this.status = status;
     }
 
@@ -30,6 +32,10 @@ public class Transaction {
 
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public TransactionType getType() {
+        return type;
     }
 
     public TransactionStatus getStatus() {

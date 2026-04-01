@@ -22,6 +22,7 @@ public class TransactionPersistenceAdapter implements TransactionRepository {
             transaction.getId(),
             transaction.getAccountId(),
             transaction.getAmount(),
+            transaction.getType(),
             transaction.getStatus()
         );
 
@@ -31,6 +32,7 @@ public class TransactionPersistenceAdapter implements TransactionRepository {
             savedEntity.getId(),
             savedEntity.getAccountId(),
             savedEntity.getAmount(),
+            savedEntity.getType(),
             savedEntity.getStatus()
         );
     }
@@ -43,6 +45,7 @@ public class TransactionPersistenceAdapter implements TransactionRepository {
                 entity.getId(),
                 entity.getAccountId(),
                 entity.getAmount(),
+                entity.getType(),
                 entity.getStatus()
             ))
             .collect(Collectors.toList());

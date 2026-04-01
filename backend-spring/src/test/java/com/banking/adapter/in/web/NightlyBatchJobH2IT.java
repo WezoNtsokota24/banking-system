@@ -4,6 +4,7 @@ import com.banking.domain.model.Account;
 import com.banking.domain.model.AccountStatus;
 import com.banking.domain.model.Transaction;
 import com.banking.domain.model.TransactionStatus;
+import com.banking.domain.model.TransactionType;
 import com.banking.domain.port.AccountRepository;
 import com.banking.domain.port.TransactionRepository;
 import com.banking.domain.service.TransactionService;
@@ -63,13 +64,13 @@ class NightlyBatchJobH2IT {
     @DisplayName("Nightly batch job should process PENDING transactions and mark them as COMPLETED")
     void testNightlyBatchJob_shouldProcessPendingTransactions() {
         // Arrange: Create PENDING transactions
-        Transaction pendingTx1 = new Transaction(null, account1.getId(), new BigDecimal("100.00"), TransactionStatus.PENDING);
+        Transaction pendingTx1 = new Transaction(null, account1.getId(), new BigDecimal("100.00"), TransactionType.WITHDRAWAL, TransactionStatus.PENDING);
         transactionRepository.save(pendingTx1);
 
-        Transaction pendingTx2 = new Transaction(null, account1.getId(), new BigDecimal("50.00"), TransactionStatus.PENDING);
+        Transaction pendingTx2 = new Transaction(null, account1.getId(), new BigDecimal("50.00"), TransactionType.WITHDRAWAL, TransactionStatus.PENDING);
         transactionRepository.save(pendingTx2);
 
-        Transaction pendingTx3 = new Transaction(null, account2.getId(), new BigDecimal("25.00"), TransactionStatus.PENDING);
+        Transaction pendingTx3 = new Transaction(null, account2.getId(), new BigDecimal("25.00"), TransactionType.WITHDRAWAL, TransactionStatus.PENDING);
         transactionRepository.save(pendingTx3);
 
         // Verify initial state: 3 PENDING transactions
@@ -123,10 +124,10 @@ class NightlyBatchJobH2IT {
     @DisplayName("Nightly batch job should only process PENDING transactions, ignore COMPLETED ones")
     void testNightlyBatchJob_shouldOnlyProcessPendingTransactions() {
         // Arrange: Mix of PENDING and COMPLETED transactions
-        Transaction pendingTx = new Transaction(null, account1.getId(), new BigDecimal("100.00"), TransactionStatus.PENDING);
+        Transaction pendingTx = new Transaction(null, account1.getId(), new BigDecimal("100.00"), TransactionType.WITHDRAWAL, TransactionStatus.PENDING);
         transactionRepository.save(pendingTx);
 
-        Transaction completedTx = new Transaction(null, account2.getId(), new BigDecimal("50.00"), TransactionStatus.COMPLETED);
+        Transaction completedTx = new Transaction(null, account2.getId(), new BigDecimal("50.00"), TransactionType.WITHDRAWAL, TransactionStatus.COMPLETED);
         transactionRepository.save(completedTx);
 
         // Act: Trigger the nightly batch job
@@ -150,7 +151,7 @@ class NightlyBatchJobH2IT {
     void testNightlyBatchJob_shouldHandleLargeNumberOfTransactions() {
         // Arrange: Create 10 PENDING transactions
         for (int i = 1; i <= 10; i++) {
-            Transaction tx = new Transaction(null, account1.getId(), new BigDecimal(i * 10), TransactionStatus.PENDING);
+            Transaction tx = new Transaction(null, account1.getId(), new BigDecimal(i * 10), TransactionType.WITHDRAWAL, TransactionStatus.PENDING);
             transactionRepository.save(tx);
         }
 

@@ -3,9 +3,9 @@ package com.banking.domain.service;
 import com.banking.domain.model.Account;
 import com.banking.domain.model.Transaction;
 import com.banking.domain.model.TransactionStatus;
+import com.banking.domain.model.TransactionType;
 import com.banking.domain.port.AccountRepository;
 import com.banking.domain.port.TransactionRepository;
-import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 /**
@@ -22,7 +22,6 @@ import java.math.BigDecimal;
  * Domain exceptions (e.g., InsufficientFundsException) propagate to the adapter layer
  * for HTTP translation.
  */
-@Service
 public class WithdrawalService {
 
     private final AccountRepository accountRepository;
@@ -67,6 +66,7 @@ public class WithdrawalService {
                 null,
                 accountId,
                 amount,
+                TransactionType.WITHDRAWAL,
                 TransactionStatus.PENDING
         );
         transactionRepository.save(transaction);
